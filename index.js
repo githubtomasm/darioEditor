@@ -4,7 +4,7 @@ moment().locale('es');
 let App = new Vue({
 	el: '#app',
 	data: {
-		activeView: "cyp",
+		activeView: "libros",
 		newItemOpen: false,
 		editItemOpen: false,
 		dataBase: {
