@@ -68,7 +68,12 @@ let App = new Vue({
 			descripcion: null,
 			contenido: null,
 		},
-		eventoTemporal: {},
+		eventoTemporal: {
+			id:null,
+			evento:null,
+			descripcion:null,
+			fecha:null
+		},
 		propuestaTemproal: {},
 		columns: {
 			libros: [{
@@ -112,7 +117,24 @@ let App = new Vue({
 				name: 'Contenido',
 				idx: 'contenido',
 				date: false
-			}, ]
+			}, ],
+			crono: [{
+				name: "Id",
+				idx: "id",
+				date: false
+			}, {
+				name: "Evento",
+				idx: "evento",
+				date: false
+			}, {
+				name: "Descripción",
+				idx: "descripcion",
+				date: false
+			}, {
+				name: "Fecha",
+				idx: "fecha",
+				date: true
+			}]
 		}
 	},
 	watch: {
@@ -173,7 +195,7 @@ let App = new Vue({
 			this.$set(this.types[type] + ".id", vm.lastId(type));
 			this.dataBase[type].push(JSON.parse(JSON.stringify(this[this.types[type]])));
 			vm.reset(this.types[type]);
-			vm.$set('newItemOpen',false);
+			vm.$set('newItemOpen', false);
 		},
 		editItem(type, item) {
 			let vm = this;

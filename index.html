@@ -143,7 +143,40 @@
 
 					<!-- Cronología -->
 					<panel title='Cronología' v-if='activeView=="crono"'>
-						Panel Content
+						<btn-new 
+						:new-open.sync="newItemOpen"
+						></btn-new>
+						<br>
+						<tabla
+						:data.sync="dataBase.crono"
+						:editswitch='editItemOpen'
+						:editing-item.sync='tempItem'
+						type='crono'
+						:columns="columns.crono"
+						></tabla>
+
+						<form-slot :config="[[12],[12],[6,6],[12],[12]]" v-if='newItemOpen'>
+							<h3  slot="slot0_0" v-if="newItemOpen && !editItemOpen">Agregar Evento</h3>
+							<h3  slot="slot1_0" v-if="editItemOpen">Editando Evento</h3>
+							<div class="form-group" slot='slot2_0'>
+								<label>Nombre del Evento:</label>
+								<input type="text" v-model="eventoTemporal.evento" class="form-control">
+							</div>
+							<div class="form-group" slot="slot2_1">
+								<label>Fecha del Evento</label>
+								<input type="date" class="form-control" v-model='eventoTemporal.fecha'>
+							</div>
+							<div class="form-group" slot="slot3_0">
+								<label>Descripción del Evento</label>
+								<textarea class="form-control" v-model="eventoTemporal.descripcion"></textarea>
+							</div>
+							<div slot="slot4_0" class="form-group text-right">
+								<button class="btn btn-success" v-if="!editItemOpen" @click="createElement('crono	')">Guardar</button>
+								<button class="btn btn-success" v-if="editItemOpen" @click="updateItem('crono	')">Actualizar</button>
+								<span>  </span>
+								<button class="btn btn-light" @click="cancelBtn()">Cancelar</button>
+							</div>
+						</form-slot>
 					</panel>
 
 					<!-- Propuesta Joven -->
