@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset='utf-8'>
+	<title>Editor App A Dario</title>
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="/fa/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="/sweetalert.css">
+
+</head>
+<body>
+	<div class="" id="app">
+		<header>
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">A Dario App Editor</a>
+					</div>
+
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav">
+							<li @click="activeView='libros'":class="{'active': activeView=='libros'}"><a href="#">Libros <span class="sr-only">(current)</span></a></li>
+							<li @click="activeView='cyp'" :class="{'active': activeView=='cyp'}"><a href="#">Cuentos Y Poemas</a></li>
+							<li @click="activeView='crono'" :class="{'active': activeView=='crono'}"><a href="#">Cronología</a></li>
+							<li @click="activeView='propJ'" :class="{'active': activeView=='propJ'}"><a href="#">Propuesta Joven</a></li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+							<li @click='saveState()' ><a href="#" style="background:#aaa;color:white">Guardar Trabajo</a> </li>
+						</ul>
+					</div><!-- /.navbar-collapse -->
+				</div><!-- /.container-fluid -->
+			</nav>
+		</header>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<!-- Libros -->
+					<panel title='Libros' v-if='activeView=="libros"'>
+						
+						<btn-new 
+						:new-open.sync="newItemOpen"
+						></btn-new>
+						<br>
+						<!-- tabla Componente -->
+						<tabla
+						:data.sync="dataBase.libros"
+						:editswitch='editItemOpen'
+						:editing-item.sync='tempItem'
+						type='libros'
+						:columns='columns.libros'
+						></tabla>
+
+						<hr>
+						<form-slot :config="[[12],[12],[6,6],[6,6],[12]]" v-if='newItemOpen'>
+							<h3  slot="slot0_0" v-if="newItemOpen && !editItemOpen">Agregar Libro</h3>
+							<h3  slot="slot1_0" v-if="editItemOpen">Editando Libro</h3>
+							<div  slot="slot2_0" class="form-group">
+								<label for="nLibro" >Título:</label>
+								<input v-model="libroTemporal.titulo" type="text" id="nLibro" class="form-control" placeholder="Escriba el Título del Libro">
+							</div>
+							<div  slot="slot2_1" class="form-group">
+								<label for="nLibro" >Año de Publicación:</label>
+								<input v-model="libroTemporal.fecha" type="date" id="aFecha" class="form-control" placeholder="Escriba el Año de Publicación">
+							</div>
+							<div  slot="slot3_0" class="form-group">
+								<label for="nLibro" >Descripción Rápida:</label>
+								<input v-model="libroTemporal.descripcion" type="text" id="nLibro" class="form-control" placeholder="Redacte una descripción rápida del libro">
+							</div>
+							<div  slot="slot3_1" class="form-group">
+								<label for="nLibro" >Nombre de la Imagen:</label>
+								<input v-model="libroTemporal.imgUrl" type="text" id="aFecha" class="form-control" placeholder="Escriba el nombre de la imagen respetando mayusculas y con su extensión">
+							</div>
+							<div slot="slot4_0" class="text-right" >
+								<button class="btn btn-success" v-if="!editItemOpen" @click="createElement('libros')">Guardar</button>
+								<button class="btn btn-success" v-if="editItemOpen" @click="updateItem('libros')">Actualizar</button>
+								<span>  </span>
+								<button class="btn btn-light" @click="cancelBtn()">Cancelar</button>
+							</div>
+						</form-slot>
+					</panel>
+
+					<!-- PyC -->
+					<panel title='Cuentos y Poemas' v-if='activeView=="cyp"'>
+						<btn-new 
+						:new-open.sync="newItemOpen"
+						></btn-new>
+						<br>
+						<!-- tabla -->
+						<tabla
+						:data.sync="dataBase.cyp"
+						:editswitch='editItemOpen'
+						:editing-item.sync='tempItem'
+						type='cyp'
+						:columns="columns.cyp"
+						></tabla>
+
+						<form-slot :config="[[12],[12],[6,6],[6,6],[12],[12]]" v-if='newItemOpen'>
+							<h3  slot="slot0_0" v-if="newItemOpen && !editItemOpen">Agregar Cuento o Poema</h3>
+							<h3  slot="slot1_0" v-if="editItemOpen">Editando Cuento o Poema</h3>
+							<div  slot="slot2_0" class="form-group">
+								<label for="nCyp" >Título:</label>
+								<input v-model="cypTemporal.titulo" type="text" id="nCyp" class="form-control" placeholder="Escriba el Título del Libro">
+							</div>
+							<div  slot="slot2_1" class="form-group">
+								<label for="" >Libro:</label>
+								<select class="form-control" v-model='cypTemporal.libroId'>
+									<option selected="selected" disabled="disabled" value="N/A">Seleccione un Libro</option>
+									<option v-for="libro in dataBase.libros" value="{{libro.id}}">{{libro.titulo}}</option>
+								</select>
+							</div>
+							<div slot="slot3_0" class="form-group">
+								<label>Tipo</label>
+								<select class="form-control" v-model='cypTemporal.tipo'>
+									<option selected="selected" disabled="disabled" value="N/A">Seleccione el tipo</option>
+									<option value='c'>Cuento</option>
+									<option value='p'>Poema</option>
+								</select>
+							</div>
+							<div slot="slot3_1" class="form-group">
+								<label>Descripción</label>
+								<input type="text" class="form-control" v-model="cypTemporal.descripcion" placeholder="Describa brevemente el poema o cuento">
+							</div>
+							<div slot="slot4_0" class="form-group">
+								<label>Contenido</label>
+								<textarea name="" id="" cols="30" rows="10" class="form-control" v-model="cypTemporal.contenido"></textarea>
+							</div>
+							<div slot="slot5_0" class="form-group text-right">
+								<button class="btn btn-success" v-if="!editItemOpen" @click="createElement('cyp')">Guardar</button>
+								<button class="btn btn-success" v-if="editItemOpen" @click="updateItem('cyp')">Actualizar</button>
+								<span>  </span>
+								<button class="btn btn-light" @click="cancelBtn()">Cancelar</button>
+							</div>
+						</form-slot>
+					</panel>
+
+					<!-- Cronología -->
+					<panel title='Cronología' v-if='activeView=="crono"'>
+						Panel Content
+					</panel>
+
+					<!-- Propuesta Joven -->
+					<panel title="Propuesta Joven" v-if='activeView=="propJ"'>
+						
+					</panel>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- panel tempalte -->
+	<script type="text/template" id="panel_template">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{title}}</h3>
+			</div>
+			<div class="panel-body">
+				<slot>
+					
+				</slot>
+			</div>
+		</div>
+	</script>
+
+	<!-- new button -->
+	<script type="text/tempalte" id='button_template'>
+		<div class="row">
+			<div class="col-lg-12 text-right">
+				<button class="btn btn-success" @click="newOpen=true" :disabled='newOpen'>
+					<i class="fa fa-book"></i>
+					Nuevo
+				</button>
+			</div>
+		</div>
+	</script>
+
+	<!-- table template -->
+	<script type="text/template" id="tabla_template">
+		<div class="row">
+			<div class="col-lg-12">
+				<table class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th v-for='columnT in columns'>{{columnT.name}}</th>
+							<th>Acción</th>
+						</tr>
+					</thead>
+					<tbody v-if='data.length==0'>
+						<tr>
+							<td colspan="6" class="text-center">No hay Registor todavía</td>
+						</tr>
+					</tbody>
+					<tbody v-if='data.length>0'>
+						<tr v-for="item in data"> 
+							<td v-for='columnV in columns'>
+								<span v-if="!columnV.date">
+									{{ item[columnV.idx] }}
+								</span>
+								<span v-else>
+									{{ dateFormat(item[columnV.idx],'YYYY-MM-DD','DD-MM-YYYY') }}
+								</span>
+							</td>
+							<td>
+								<button class="btn btn-success" @click="editItem(item)" :disabled="editswitch">
+									<i class="fa fa-edit"></i>
+									Editar
+								</button>
+								<button class="btn btn-danger" @click='deleteItem(item)' :disabled="editswitch">
+									<i class="fa fa-trash-o"></i>
+									Borrar
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</script>
+	
+	<script type="text/template" id="form_template">
+		<form class="">
+			<div class="row" v-for='(numR, row) in config'>
+				<div v-for='(numC,col) in row' :class="'col-lg-'+col">
+					<slot :name="'slot'+numR+'_'+numC"></slot>
+				</div>
+			</div>
+		</form>
+	</script>
+
+	<script src="/moment.js"></script>
+	<script src='/vue.1.0.min.js'></script>
+	<script src='/jquery-1.9.1.js'></script>
+	<script src="/sweetalert.min.js"></script>
+	<script src='/bootstrap/js/bootstrap.min.js'></script>
+	<script src='panel.js'></script>
+	<script src='tabla.js'></script>
+	<script src='form.js'></script>
+	<script src='btn.js'></script>
+	<script src='index.js'></script>
+
+</body>
+</html>
