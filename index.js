@@ -180,7 +180,11 @@ let App = new Vue({
 			this.deleteItem(objItem.type, objItem.item);
 		}
 	},
-	computed: {},
+	computed: {
+		export(){
+			return "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.dataBase));
+		}
+	},
 	ready() {
 		this.openState();
 	},
