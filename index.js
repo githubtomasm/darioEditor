@@ -69,12 +69,18 @@ let App = new Vue({
 			contenido: null,
 		},
 		eventoTemporal: {
-			id:null,
-			evento:null,
-			descripcion:null,
-			fecha:null
+			id: null,
+			evento: null,
+			descripcion: null,
+			fecha: null
 		},
-		propuestaTemproal: {},
+		propuestaTemproal: {
+			id: null,
+			titulo: null,
+			contenido: null,
+			autor: null,
+			descripcion: null,
+		},
 		columns: {
 			libros: [{
 				name: 'Id',
@@ -117,7 +123,7 @@ let App = new Vue({
 				name: 'Contenido',
 				idx: 'contenido',
 				date: false
-			}, ],
+			}],
 			crono: [{
 				name: "Id",
 				idx: "id",
@@ -134,7 +140,28 @@ let App = new Vue({
 				name: "Fecha",
 				idx: "fecha",
 				date: true
-			}]
+			}],
+			propJ: [{
+				name: "Id",
+				idx: 'id',
+				date: false
+			}, {
+				name: "Título",
+				idx: 'titulo',
+				date: false
+			}, {
+				name: "Contenido",
+				idx: 'contenido',
+				date: false
+			}, {
+				name: "Autor",
+				idx: 'autor',
+				date: false
+			}, {
+				name: "Descripción",
+				idx: 'descripcion',
+				date: false
+			}, ]
 		}
 	},
 	watch: {

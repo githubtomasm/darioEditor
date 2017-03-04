@@ -25,6 +25,10 @@ Vue.component('tabla', {
 				item:item,
 			});
 		},
+		shortText(text, chars){
+			text = text.slice(0,chars);
+			return text+"...";
+		}
 
 	}
 });

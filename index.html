@@ -130,7 +130,7 @@
 							</div>
 							<div slot="slot4_0" class="form-group">
 								<label>Contenido</label>
-								<textarea name="" id="" cols="30" rows="10" class="form-control" v-model="cypTemporal.contenido"></textarea>
+								<textarea name="" id="" rows="10" class="form-control" v-model="cypTemporal.contenido"></textarea>
 							</div>
 							<div slot="slot5_0" class="form-group text-right">
 								<button class="btn btn-success" v-if="!editItemOpen" @click="createElement('cyp')">Guardar</button>
@@ -168,11 +168,11 @@
 							</div>
 							<div class="form-group" slot="slot3_0">
 								<label>Descripción del Evento</label>
-								<textarea class="form-control" v-model="eventoTemporal.descripcion"></textarea>
+								<textarea rows="10" class="form-control" v-model="eventoTemporal.descripcion"></textarea>
 							</div>
 							<div slot="slot4_0" class="form-group text-right">
-								<button class="btn btn-success" v-if="!editItemOpen" @click="createElement('crono	')">Guardar</button>
-								<button class="btn btn-success" v-if="editItemOpen" @click="updateItem('crono	')">Actualizar</button>
+								<button class="btn btn-success" v-if="!editItemOpen" @click="createElement('crono')">Guardar</button>
+								<button class="btn btn-success" v-if="editItemOpen" @click="updateItem('crono')">Actualizar</button>
 								<span>  </span>
 								<button class="btn btn-light" @click="cancelBtn()">Cancelar</button>
 							</div>
@@ -181,7 +181,43 @@
 
 					<!-- Propuesta Joven -->
 					<panel title="Propuesta Joven" v-if='activeView=="propJ"'>
-						
+						<btn-new 
+						:new-open.sync="newItemOpen"
+						></btn-new>
+						<br>
+						<tabla
+						:data.sync="dataBase.propJ"
+						:editswitch='editItemOpen'
+						:editing-item.sync='tempItem'
+						type='propJ'
+						:columns="columns.propJ"
+						></tabla>
+						<form-slot :config="[[12],[12],[6,6],[6,6],[12]]" v-if='newItemOpen'>
+							<h3  slot="slot0_0" v-if="newItemOpen && !editItemOpen">Agregar Poema</h3>
+							<h3  slot="slot1_0" v-if="editItemOpen">Editando Poema</h3>
+							<div class="form-group" slot="slot2_0">
+								<label>Título</label>
+								<input type="text" class="form-control" v-model="propuestaTemproal.titulo">
+							</div>
+							<div class="form-group" slot="slot2_1">
+								<label>Autor</label>
+								<input type="text" class="form-control" v-model="propuestaTemproal.autor">
+							</div>
+							<div class="form-group" slot='slot3_0'>
+								<label>Contenido</label>
+								<textarea rows="10" class="form-control" v-model="propuestaTemproal.contenido"></textarea>
+							</div>
+							<div class="form-group" slot='slot3_1'>
+								<label>descripción</label>
+								<textarea rows="10" class="form-control" v-model="propuestaTemproal.descripcion"></textarea>
+							</div>
+							<div slot="slot4_0" class="form-group text-right">
+								<button class="btn btn-success" v-if="!editItemOpen" @click="createElement('propJ')">Guardar</button>
+								<button class="btn btn-success" v-if="editItemOpen" @click="updateItem('propJ')">Actualizar</button>
+								<span>  </span>
+								<button class="btn btn-light" @click="cancelBtn()">Cancelar</button>
+							</div>
+						</form-slot>
 					</panel>
 					
 				</div>
